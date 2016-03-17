@@ -5,7 +5,7 @@ galaxy_info:
   description: Install elasticsearch
   license: MIT
   min_ansible_version: 1.9
-  tags:
+  galaxy_tags:
     - database
     - development
     - web
