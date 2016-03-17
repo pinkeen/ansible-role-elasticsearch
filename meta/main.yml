@@ -1,0 +1,18 @@
+---
+dependencies:
+    - role: open-port
+      port: "{{ es_http_port.split('-')|join(':') }}"
+      proto: tcp
+      comment: "Elasticsearch http API"
+      iface: "{{ es_interface_name }}"
+      when: es_interface_name != 'lo'
+      allowed_ips: "{{ es_allowed_ips }}"
+      allowed_group: "{{ es_allowed_group }}"      
+    - role: open-port
+      port: "{{ es_transport_port.split('-')|join(':') }}"
+      proto: tcp      
+      comment: "Elasticsearch transport"
+      iface: "{{ es_interface_name }}"
+      when: es_interface_name != 'lo'
+      allowed_ips: "{{ es_allowed_ips }}"
+      allowed_group: "{{ es_allowed_group }}"

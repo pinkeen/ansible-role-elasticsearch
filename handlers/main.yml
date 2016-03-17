@@ -1,0 +1,6 @@
+---
+- name: Restart elasticsearch
+  service: name=elasticsearch state=restarted
+
+- name: Apply sysctl config
+  shell: sysctl -p /etc/sysctl.conf
