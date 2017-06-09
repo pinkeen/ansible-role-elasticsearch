@@ -1,2 +1,0 @@
----
-es_bind_host: "{% if es_interface_name != 'any' %}{{ hostvars[inventory_hostname]['ansible_' + es_interface_name]['ipv4']['address'] }}{% else %}0.0.0.0{% endif %}"

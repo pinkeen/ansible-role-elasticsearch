@@ -1,6 +1,10 @@
----
 - name: Install Java
   yum: name=java-1.8.0-openjdk-headless state=present
+
+- name: Add elasticsearch repo key
+  rpm_key:
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
 
 - name: Enable elasticsearch repo
   copy: src=elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo

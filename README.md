@@ -1,12 +1,30 @@
-# Universal role which installs and configures an elasticsearch node. (for CentOS6/7)
+Sets up elasticsearch 1.7 on CentOS 7
+=====================================
 
-Supported vars:
- - es_interface_name (default: lo) - elastic shall bind to this iface, 'any' -> bind to all ifaces
- - es_cluster_name (default: elastic)
- - es_multicast (default: false)
- - es_unicast_hosts (default: []) - list of other es hosts in cluster
- - es_http_port (default: 9200-9299)
- - es_transport_port (default: 9300-9400)
- - es_nodes_group (default: false) - name of the ansible group which holds all hosts in this cluster
- - es_allowed_ips (passed to open-port)
- - es_allowed_group (passed to open-port)
+Simplified to the core.
+
+Look at defaults for available config.
+
+Example set up of a cluster using ansible group:
+
+```yml
+- name: Elasticsearch
+  user: root
+  hosts: search
+  pre_tasks:
+    - name: Initialize elasticsearch hosts var
+      set_fact:
+        es_unicast_hosts: []
+    - name: Gather elasticsearch hosts by group
+      set_fact:
+        es_unicast_hosts: "{{ es_unicast_hosts }} + [ '{{ hostvars[item].intnet_host }}' ]"
+      when: item != inventory_hostname
+      with_items: "{{ groups['search'] }}"
+    - debug:
+        msg: "Initialized elasticsearch hosts: {{ es_unicast_hosts|join(', ') }}"
+  roles:
+    - pinkeen.elasticsearch
+```
+
+
+

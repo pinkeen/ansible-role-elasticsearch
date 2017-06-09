@@ -4,7 +4,7 @@ galaxy_info:
   company: creativestyle
   description: Install elasticsearch
   license: MIT
-  min_ansible_version: 1.9
+  min_ansible_version: 2.0
   galaxy_tags:
     - database
     - development
@@ -12,4 +12,4 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - all
+        - 7

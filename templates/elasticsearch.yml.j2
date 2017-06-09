@@ -1,8 +1,6 @@
 network:
-    bind_host: {{ es_bind_host }}
-{% if es_interface_name != 'any' %}
-    publish_host: {{ es_bind_host }}
-{% endif %}
+    bind_host: {{ es_bind_address }}
+    publish_host: {{ es_bind_address }}
 
 http:
     port: {{ es_http_port }}    
@@ -19,23 +17,11 @@ node:
 discovery:
     zen:
         ping:
-            multicast.enabled: {% if es_multicast %}true{% else %}false{% endif %}
-      
-{% if not es_multicast and (es_unicast_hosts or es_nodes_group is defined) %}            
-        unicast.hosts:
-{% if es_unicast_hosts %}
-        {% for hostname in es_unicast_hosts %}
-            - {{ hostname }}
-        {% endfor %}
-{% endif %}
+            multicast.enabled: false
+            {% if es_unicast_hosts -%}
+            unicast.hosts:
+                {% for hostname in es_unicast_hosts -%}
+                - {{ hostname }}
+                {% endfor %}
+            {% endif %}
 
-{% if es_nodes_group is defined %}
-    {% for hostname in groups[es_nodes_group] if hostname != inventory_hostname %}
-        {% if es_interface_name %}
-        - {{ hostvars[hostname]['ansible_' + es_interface_name]['ipv4']['address'] }}
-        {% else %}
-        - {{ hostvars[hostname]['ansible_default_ipv4']['address'] }}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-{% endif %}
