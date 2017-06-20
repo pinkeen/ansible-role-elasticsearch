@@ -18,5 +18,19 @@
     dest: /etc/elasticsearch/elasticsearch.yml
   notify: Restart elasticsearch
 
+- name: Configure elasticsearch system vars
+  lineinfile:
+    dest: /etc/sysconfig/elasticsearch
+    regexp: "{{ item.name }}"
+    line: "{{ item.name }}={{ item.value }}"
+    create: yes
+    state: present
+    mode: 0644
+  notify: Restart elasticsearch
+  when: item.value
+  with_items:
+    - { name: ES_HEAP_SIZE,  value: "{{ es_heap_size }}"   }
+    - { name: ES_JAVA_OPTS,  value: "{{ es_java_opts }}"   }
+
 - name: Start elasticsearch
   service: name=elasticsearch state=started enabled=yes
